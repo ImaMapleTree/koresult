@@ -15,11 +15,11 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "kotlin-result"
+rootProject.name = "koresult"
 
 include(
     "benchmarks",
     "example",
-    "kotlin-result",
-    "kotlin-result-coroutines"
+    "koresult",
+    "koresult-coroutines"
 )

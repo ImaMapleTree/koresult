@@ -11,7 +11,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.kotlin.coroutines.core)
-                api(project(":kotlin-result"))
+                api(project(":koresult"))
             }
         }
 

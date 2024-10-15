@@ -20,7 +20,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(project(":kotlin-result-coroutines"))
+                implementation(project(":koresult-coroutines"))
                 implementation(libs.kotlin.benchmark.runtime)
                 implementation(libs.kotlin.coroutines.core)
             }

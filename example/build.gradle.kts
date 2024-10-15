@@ -12,7 +12,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":kotlin-result"))
+    implementation(project(":koresult"))
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(libs.logback)
     implementation(libs.ktor.serialization.jackson)
