@@ -2,7 +2,7 @@ package com.github.michaelbull.result.example.service
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.example.model.domain.DomainMessage
 import com.github.michaelbull.result.example.model.domain.EmailAddress
 import com.github.michaelbull.result.example.model.domain.EmailInvalid
@@ -14,7 +14,7 @@ object EmailAddressParser {
     private const val MAX_LENGTH = 20
     private val PATTERN = ".+@.+\\..+".toRegex() // crude validation
 
-    fun parse(address: String?): Result<EmailAddress, DomainMessage> {
+    fun parse(address: String?): KoResult<EmailAddress, DomainMessage> {
         return when {
             address.isNullOrBlank() -> Err(EmailRequired)
             address.length > MAX_LENGTH -> Err(EmailTooLong)

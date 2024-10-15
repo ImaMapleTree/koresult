@@ -5,11 +5,11 @@ import kotlin.contracts.contract
 
 /**
  * Calls the specified function [block] with [BindingScope] as its receiver and returns its
- * [Result].
+ * [KoResult].
  *
  * When inside a binding [block], the [bind][BindingScope.bind] function is accessible on any
- * [Result]. Calling the [bind][BindingScope.bind] function will attempt to unwrap the [Result]
- * and locally return its [value][Result.value].
+ * [KoResult]. Calling the [bind][BindingScope.bind] function will attempt to unwrap the [KoResult]
+ * and locally return its [value][KoResult.value].
  *
  * If a [bind][BindingScope.bind] returns an error, the [block] will terminate immediately.
  *
@@ -25,7 +25,7 @@ import kotlin.contracts.contract
  * }
  * ```
  */
-public inline fun <V, E> binding(crossinline block: BindingScope<E>.() -> V): Result<V, E> {
+public inline fun <V, E> binding(crossinline block: BindingScope<E>.() -> V): KoResult<V, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -42,19 +42,19 @@ public inline fun <V, E> binding(crossinline block: BindingScope<E>.() -> V): Re
 internal expect object BindException : Exception
 
 public interface BindingScope<E> {
-    public fun <V> Result<V, E>.bind(): V
+    public fun <V> KoResult<V, E>.bind(): V
 }
 
 @PublishedApi
 internal class BindingScopeImpl<E> : BindingScope<E> {
 
-    var result: Result<Nothing, E>? = null
+    var result: KoErr<E>? = null
 
-    override fun <V> Result<V, E>.bind(): V {
+    override fun <V> KoResult<V, E>.bind(): V {
         return if (isOk) {
             value
         } else {
-            result = this.asErr()
+            result = coerceValueType()
             throw BindException
         }
     }

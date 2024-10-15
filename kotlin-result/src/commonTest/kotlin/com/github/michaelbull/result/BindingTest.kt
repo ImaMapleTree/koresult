@@ -9,8 +9,8 @@ class BindingTest {
 
     @Test
     fun returnsOkIfAllBindsSuccessful() {
-        fun provideX(): Result<Int, BindingError> = Ok(1)
-        fun provideY(): Result<Int, BindingError> = Ok(2)
+        fun provideX(): KoResult<Int, BindingError> = Ok(1)
+        fun provideY(): KoResult<Int, BindingError> = Ok(2)
 
         val result = binding {
             val x = provideX().bind()
@@ -26,8 +26,8 @@ class BindingTest {
 
     @Test
     fun returnsOkIfAllBindsOfDifferentTypeAreSuccessful() {
-        fun provideX(): Result<String, BindingError> = Ok("1")
-        fun provideY(x: Int): Result<Int, BindingError> = Ok(x + 2)
+        fun provideX(): KoResult<String, BindingError> = Ok("1")
+        fun provideY(x: Int): KoResult<Int, BindingError> = Ok(x + 2)
 
         val result = binding {
             val x = provideX().bind()
@@ -43,9 +43,9 @@ class BindingTest {
 
     @Test
     fun returnsFirstErrIfBindingFailed() {
-        fun provideX(): Result<Int, BindingError> = Ok(1)
-        fun provideY(): Result<Int, BindingError> = Err(BindingError)
-        fun provideZ(): Result<Int, BindingError> = Ok(2)
+        fun provideX(): KoResult<Int, BindingError> = Ok(1)
+        fun provideY(): KoResult<Int, BindingError> = Err(BindingError)
+        fun provideZ(): KoResult<Int, BindingError> = Ok(2)
 
         val result = binding {
             val x = provideX().bind()
@@ -62,11 +62,11 @@ class BindingTest {
 
     @Test
     fun returnsFirstErrIfBindingsOfDifferentTypesFailed() {
-        fun provideX(): Result<Int, BindingError> = Ok(1)
-        fun provideY(): Result<String, BindingError> = Err(BindingError)
-        fun provideZ(): Result<Int, BindingError> = Ok(2)
+        fun provideX(): KoResult<Int, BindingError> = Ok(1)
+        fun provideY(): KoResult<String, BindingError> = Err(BindingError)
+        fun provideZ(): KoResult<Int, BindingError> = Ok(2)
 
-        val result: Result<Int, BindingError> = binding {
+        val result: KoResult<Int, BindingError> = binding {
             val x = provideX().bind()
             val y = provideY().bind()
             val z = provideZ().bind()
@@ -81,10 +81,10 @@ class BindingTest {
 
     @Test
     fun runCatchingInsideBindingDoesNotSwallow() {
-        fun squareNumber(): Result<Int, BindingError> = throw RuntimeException()
+        fun squareNumber(): KoResult<Int, BindingError> = throw RuntimeException()
 
         val squaredNumbers = binding<List<Int>, BindingError> {
-            val result: Result<List<Int>, Throwable> = runCatching {
+            val result: KoResult<List<Int>, Throwable> = runCatching {
                 (0..<10).map { number ->
                     squareNumber().bind()
                 }

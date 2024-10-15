@@ -41,40 +41,40 @@ class CoroutineBindingBenchmark {
 
     private val time = 100L
 
-    private fun nonSuspend(): Result<Int, Error> = binding {
+    private fun nonSuspend(): KoResult<Int, Error> = binding {
         val x = provideXBlocking().bind()
         val y = provideYBlocking().bind()
         x + y
     }
 
-    private suspend fun withSuspend(): Result<Int, Error> = coroutineBinding {
+    private suspend fun withSuspend(): KoResult<Int, Error> = coroutineBinding {
         val x = provideX().bind()
         val y = provideY().bind()
         x + y
     }
 
-    private suspend fun withAsyncSuspend(): Result<Int, Error> = coroutineBinding {
+    private suspend fun withAsyncSuspend(): KoResult<Int, Error> = coroutineBinding {
         val x = async { provideX().bind() }
         val y = async { provideY().bind() }
         x.await() + y.await()
     }
 
-    private fun provideXBlocking(): Result<Int, Error> {
+    private fun provideXBlocking(): KoResult<Int, Error> {
         Thread.sleep(time)
         return Ok(1)
     }
 
-    private fun provideYBlocking(): Result<Int, Error> {
+    private fun provideYBlocking(): KoResult<Int, Error> {
         Thread.sleep(time)
         return Ok(2)
     }
 
-    private suspend fun provideX(): Result<Int, Error> {
+    private suspend fun provideX(): KoResult<Int, Error> {
         delay(time)
         return Ok(1)
     }
 
-    private suspend fun provideY(): Result<Int, Error> {
+    private suspend fun provideY(): KoResult<Int, Error> {
         delay(time)
         return Ok(2)
     }

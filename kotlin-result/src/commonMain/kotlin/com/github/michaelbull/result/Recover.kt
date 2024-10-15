@@ -4,44 +4,44 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr], otherwise [this].
  */
-public inline infix fun <V, E> Result<V, E>.recover(transform: (E) -> V): Result<V, Nothing> {
+public inline infix fun <V, E> KoResult<V, E>.recover(transform: (E) -> V): KoResult<V, E> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
 
     return when {
-        isOk -> this.asOk()
+        isOk -> this
         else -> Ok(transform(error))
     }
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr], catching and encapsulating any thrown exception as an [Err],
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr], catching and encapsulating any thrown exception as an [Err],
  * otherwise [this].
  */
-public inline infix fun <V, E> Result<V, E>.recoverCatching(transform: (E) -> V): Result<V, Throwable> {
+public inline infix fun <V, E> KoResult<V, E>.recoverCatching(transform: (E) -> V): KoResult<V, Throwable> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
 
     return when {
-        isOk -> this.asOk()
+        isOk -> coerceErrorType()
         else -> runCatching { transform(error) }
     }
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr] and satisfies the given [predicate], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr] and satisfies the given [predicate], otherwise [this].
  */
-public inline fun <V, E> Result<V, E>.recoverIf(
+public inline fun <V, E> KoResult<V, E>.recoverIf(
     predicate: (E) -> Boolean,
     transform: (E) -> V,
-): Result<V, E> {
+): KoResult<V, E> {
     contract {
         callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
@@ -54,10 +54,10 @@ public inline fun <V, E> Result<V, E>.recoverIf(
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr] and _does not_ satisfy the given [predicate], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr] and _does not_ satisfy the given [predicate], otherwise [this].
  */
-public inline fun <V, E> Result<V, E>.recoverUnless(predicate: (E) -> Boolean, transform: (E) -> V): Result<V, E> {
+public inline fun <V, E> KoResult<V, E>.recoverUnless(predicate: (E) -> Boolean, transform: (E) -> V): KoResult<V, E> {
     contract {
         callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
@@ -70,10 +70,10 @@ public inline fun <V, E> Result<V, E>.recoverUnless(predicate: (E) -> Boolean, t
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr], otherwise [this].
  */
-public inline fun <V, E> Result<V, E>.andThenRecover(transform: (E) -> Result<V, E>): Result<V, E> {
+public inline fun <V, E> KoResult<V, E>.andThenRecover(transform: (E) -> KoResult<V, E>): KoResult<V, E> {
     contract {
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
     }
@@ -85,13 +85,13 @@ public inline fun <V, E> Result<V, E>.andThenRecover(transform: (E) -> Result<V,
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr] and satisfies the given [predicate], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr] and satisfies the given [predicate], otherwise [this].
  */
-public inline fun <V, E> Result<V, E>.andThenRecoverIf(
+public inline fun <V, E> KoResult<V, E>.andThenRecoverIf(
     predicate: (E) -> Boolean,
-    transform: (E) -> Result<V, E>,
-): Result<V, E> {
+    transform: (E) -> KoResult<V, E>,
+): KoResult<V, E> {
     contract {
         callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)
@@ -104,13 +104,13 @@ public inline fun <V, E> Result<V, E>.andThenRecoverIf(
 }
 
 /**
- * Returns the [transformation][transform] of the [error][Result.error] if this result
- * [is an error][Result.isErr] and _does not_ satisfy the given [predicate], otherwise [this].
+ * Returns the [transformation][transform] of the [error][KoResult.error] if this result
+ * [is an error][KoResult.isErr] and _does not_ satisfy the given [predicate], otherwise [this].
  */
-public inline fun <V, E> Result<V, E>.andThenRecoverUnless(
+public inline fun <V, E> KoResult<V, E>.andThenRecoverUnless(
     predicate: (E) -> Boolean,
-    transform: (E) -> Result<V, E>,
-): Result<V, E> {
+    transform: (E) -> KoResult<V, E>,
+): KoResult<V, E> {
     contract {
         callsInPlace(predicate, InvocationKind.AT_MOST_ONCE)
         callsInPlace(transform, InvocationKind.AT_MOST_ONCE)

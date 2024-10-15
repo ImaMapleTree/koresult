@@ -23,7 +23,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, MapErr> = Ok(10)
+            val value: KoResult<Int, MapErr> = Ok(10)
 
             assertEquals(
                 expected = Ok(30),
@@ -33,7 +33,7 @@ class MapTest {
 
         @Test
         fun returnsErrorIfErr() {
-            val value: Result<Int, MapErr> = Err(MapErr.HelloError)
+            val value: KoResult<Int, MapErr> = Err(MapErr.HelloError)
 
             assertEquals(
                 expected = Err(MapErr.HelloError),
@@ -48,7 +48,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, Throwable> = Ok(10)
+            val value: KoResult<Int, Throwable> = Ok(10)
 
             assertEquals(
                 expected = Ok(30),
@@ -58,7 +58,7 @@ class MapTest {
 
         @Test
         fun returnsErrIfTransformationThrows() {
-            val value: Result<Int, Throwable> = Ok(10)
+            val value: KoResult<Int, Throwable> = Ok(10)
 
             assertEquals(
                 expected = Err(MapException),
@@ -68,7 +68,7 @@ class MapTest {
 
         @Test
         fun returnsErrorIfErr() {
-            val value: Result<Int, Throwable> = Err(MapException)
+            val value: KoResult<Int, Throwable> = Err(MapException)
 
             assertEquals(
                 expected = Err(MapException),
@@ -159,7 +159,7 @@ class MapTest {
 
         @Test
         fun returnsValueIfOk() {
-            val value: Result<Int, MapErr> = Ok(70)
+            val value: KoResult<Int, MapErr> = Ok(70)
 
             assertEquals(
                 expected = Ok(70),
@@ -169,7 +169,7 @@ class MapTest {
 
         @Test
         fun returnsErrorIfErr() {
-            val value: Result<Int, MapErr> = Err(MapErr.HelloError)
+            val value: KoResult<Int, MapErr> = Err(MapErr.HelloError)
 
             assertEquals(
                 expected = Err(MapErr.WorldError),
@@ -182,7 +182,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<String, String> = Ok("foo")
+            val value: KoResult<String, String> = Ok("foo")
 
             assertEquals(
                 expected = 3,
@@ -192,7 +192,7 @@ class MapTest {
 
         @Test
         fun returnsDefaultValueIfErr() {
-            val value: Result<String, String> = Err("foo")
+            val value: KoResult<String, String> = Err("foo")
 
             assertEquals(
                 expected = 42,
@@ -206,7 +206,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<String, String> = Ok("foo")
+            val value: KoResult<String, String> = Ok("foo")
 
             assertEquals(
                 expected = 3,
@@ -216,7 +216,7 @@ class MapTest {
 
         @Test
         fun returnsDefaultValueIfErr() {
-            val value: Result<String, String> = Err("foo")
+            val value: KoResult<String, String> = Err("foo")
 
             assertEquals(
                 expected = 42,
@@ -229,7 +229,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, Long> = Ok(50)
+            val value: KoResult<Int, Long> = Ok(50)
 
             val result: String = value.mapBoth(
                 success = { "good $it" },
@@ -244,7 +244,7 @@ class MapTest {
 
         @Test
         fun returnsTransformedErrorIfErr() {
-            val value: Result<Int, Long> = Err(20)
+            val value: KoResult<Int, Long> = Err(20)
 
             val result: String = value.mapBoth(
                 success = { "good $it" },
@@ -262,9 +262,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, Long> = Ok(50)
+            val value: KoResult<Int, Long> = Ok(50)
 
-            val result: Result<String, Long> = value.flatMapBoth(
+            val result: KoResult<String, Long> = value.flatMapBoth(
                 success = { Ok("good $it") },
                 failure = { Err(100L) },
             )
@@ -277,9 +277,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedErrorIfErr() {
-            val result: Result<Int, Long> = Err(25L)
+            val result: KoResult<Int, Long> = Err(25L)
 
-            val value: Result<String, Long> = result.flatMapBoth(
+            val value: KoResult<String, Long> = result.flatMapBoth(
                 success = { Ok("good $it") },
                 failure = { Err(100L) },
             )
@@ -295,9 +295,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, MapErr.HelloError> = Ok(500)
+            val value: KoResult<Int, MapErr.HelloError> = Ok(500)
 
-            val result: Result<Long, MapErr.CustomError> = value.mapEither(
+            val result: KoResult<Long, MapErr.CustomError> = value.mapEither(
                 success = { it + 500L },
                 failure = { MapErr.CustomError("$it") },
             )
@@ -310,9 +310,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedErrorIfErr() {
-            val value: Result<Int, MapErr.HelloError> = Err(MapErr.HelloError)
+            val value: KoResult<Int, MapErr.HelloError> = Err(MapErr.HelloError)
 
-            val result: Result<Long, MapErr.CustomError> = value.mapEither(
+            val result: KoResult<Long, MapErr.CustomError> = value.mapEither(
                 success = { it + 500L },
                 failure = { MapErr.CustomError("bad") },
             )
@@ -328,9 +328,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedValueIfOk() {
-            val value: Result<Int, MapErr.HelloError> = Ok(500)
+            val value: KoResult<Int, MapErr.HelloError> = Ok(500)
 
-            val result: Result<Long, MapErr.CustomError> = value.flatMapEither(
+            val result: KoResult<Long, MapErr.CustomError> = value.flatMapEither(
                 success = { Ok(it + 500L) },
                 failure = { Err(MapErr.CustomError("$it")) },
             )
@@ -343,9 +343,9 @@ class MapTest {
 
         @Test
         fun returnsTransformedErrorIfErr() {
-            val value: Result<Int, MapErr.HelloError> = Err(MapErr.HelloError)
+            val value: KoResult<Int, MapErr.HelloError> = Err(MapErr.HelloError)
 
-            val result: Result<Long, MapErr.CustomError> = value.flatMapEither(
+            val result: KoResult<Long, MapErr.CustomError> = value.flatMapEither(
                 success = { Ok(it + 500L) },
                 failure = { Err(MapErr.CustomError("bad")) },
             )

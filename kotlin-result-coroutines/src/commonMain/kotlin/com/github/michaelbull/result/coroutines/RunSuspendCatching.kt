@@ -1,6 +1,6 @@
 package com.github.michaelbull.result.coroutines
 
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.runCatching
 import com.github.michaelbull.result.throwIf
 import kotlinx.coroutines.CancellationException
@@ -14,7 +14,7 @@ import kotlin.contracts.contract
  * [CancellationException], the exception is thrown to indicate  _normal_ cancellation of a
  * coroutine.
  */
-public inline fun <V> runSuspendCatching(block: () -> V): Result<V, Throwable> {
+public inline fun <V> runSuspendCatching(block: () -> V): KoResult<V, Throwable> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -31,7 +31,7 @@ public inline fun <V> runSuspendCatching(block: () -> V): Result<V, Throwable> {
  * encapsulated failure is a [CancellationException], the exception is thrown to indicate  _normal_
  * cancellation of a coroutine.
  */
-public inline infix fun <T, V> T.runSuspendCatching(block: T.() -> V): Result<V, Throwable> {
+public inline infix fun <T, V> T.runSuspendCatching(block: T.() -> V): KoResult<V, Throwable> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }

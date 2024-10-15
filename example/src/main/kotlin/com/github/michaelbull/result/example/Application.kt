@@ -1,7 +1,7 @@
 package com.github.michaelbull.result.example
 
 import com.fasterxml.jackson.databind.SerializationFeature
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.example.model.domain.Created
 import com.github.michaelbull.result.example.model.domain.CustomerIdMustBePositive
@@ -103,7 +103,7 @@ fun Application.configureRouting() {
     }
 }
 
-private fun Parameters.readId(): Result<Long, DomainMessage> {
+private fun Parameters.readId(): KoResult<Long, DomainMessage> {
     return get("id")?.toLongOrNull().toResultOr { CustomerRequired }
 }
 

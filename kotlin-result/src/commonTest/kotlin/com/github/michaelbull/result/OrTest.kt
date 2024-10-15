@@ -74,7 +74,7 @@ class OrTest {
 
         @Test
         fun returnsErrIfPredicateDoesNotMatch() {
-            val result: Result<Int, Exception> = Err(RuntimeException("throw if"))
+            val result: KoResult<Int, Exception> = Err(RuntimeException("throw if"))
 
             assertEquals(
                 expected = result,
@@ -104,7 +104,7 @@ class OrTest {
 
         @Test
         fun returnsErrIfPredicateMatches() {
-            val result: Result<Int, Exception> = Err(RuntimeException("throw unless"))
+            val result: KoResult<Int, Exception> = Err(RuntimeException("throw unless"))
 
             assertEquals(
                 expected = result,

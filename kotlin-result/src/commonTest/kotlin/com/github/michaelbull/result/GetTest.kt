@@ -163,10 +163,10 @@ class GetTest {
 
         @Test
         fun returnsValueIfOk() {
-            val left: Result<Left, Left> = Ok(Left)
-            val right: Result<Right, Right> = Ok(Right)
+            val left: KoResult<Left, Left> = Ok(Left)
+            val right: KoResult<Right, Right> = Ok(Right)
 
-            val result: Result<Direction, Direction> = left.flatMapEither(
+            val result: KoResult<Direction, Direction> = left.flatMapEither(
                 success = { left },
                 failure = { right },
             )
@@ -181,10 +181,10 @@ class GetTest {
 
         @Test
         fun returnsErrorIfErr() {
-            val left: Result<Left, Left> = Err(Left)
-            val right: Result<Right, Right> = Err(Right)
+            val left: KoResult<Left, Left> = Err(Left)
+            val right: KoResult<Right, Right> = Err(Right)
 
-            val result: Result<Direction, Direction> = left.flatMapEither(
+            val result: KoResult<Direction, Direction> = left.flatMapEither(
                 success = { left },
                 failure = { right },
             )

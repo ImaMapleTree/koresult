@@ -3,10 +3,10 @@ package com.github.michaelbull.result
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 
-private typealias Producer<T, E> = () -> Result<T, E>
+private typealias Producer<T, E> = () -> KoResult<T, E>
 
 /**
- * Applies the given [transform] function to two [Results][Result], returning early with the first
+ * Applies the given [transform] function to two [Results][KoResult], returning early with the first
  * [Err] if a transformation fails.
  *
  * - Elm: http://package.elm-lang.org/packages/elm-lang/core/latest/Result#map2
@@ -15,7 +15,7 @@ public inline fun <T1, T2, E, V> zip(
     producer1: Producer<T1, E>,
     producer2: Producer<T2, E>,
     transform: (T1, T2) -> V,
-): Result<V, E> {
+): KoResult<V, E> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.AT_MOST_ONCE)
@@ -30,7 +30,7 @@ public inline fun <T1, T2, E, V> zip(
 }
 
 /**
- * Applies the given [transform] function to three [Results][Result], returning early with the
+ * Applies the given [transform] function to three [Results][KoResult], returning early with the
  * first [Err] if a transformation fails.
  *
  * - Elm: http://package.elm-lang.org/packages/elm-lang/core/latest/Result#map3
@@ -40,7 +40,7 @@ public inline fun <T1, T2, T3, E, V> zip(
     producer2: Producer<T2, E>,
     producer3: Producer<T3, E>,
     transform: (T1, T2, T3) -> V,
-): Result<V, E> {
+): KoResult<V, E> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.AT_MOST_ONCE)
@@ -58,7 +58,7 @@ public inline fun <T1, T2, T3, E, V> zip(
 }
 
 /**
- * Applies the given [transform] function to four [Results][Result], returning early with the
+ * Applies the given [transform] function to four [Results][KoResult], returning early with the
  * first [Err] if a transformation fails.
  *
  * - Elm: http://package.elm-lang.org/packages/elm-lang/core/latest/Result#map4
@@ -69,7 +69,7 @@ public inline fun <T1, T2, T3, T4, E, V> zip(
     producer3: Producer<T3, E>,
     producer4: Producer<T4, E>,
     transform: (T1, T2, T3, T4) -> V,
-): Result<V, E> {
+): KoResult<V, E> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.AT_MOST_ONCE)
@@ -90,7 +90,7 @@ public inline fun <T1, T2, T3, T4, E, V> zip(
 }
 
 /**
- * Applies the given [transform] function to five [Results][Result], returning early with the
+ * Applies the given [transform] function to five [Results][KoResult], returning early with the
  * first [Err] if a transformation fails.
  *
  * - Elm: http://package.elm-lang.org/packages/elm-lang/core/latest/Result#map5
@@ -102,7 +102,7 @@ public inline fun <T1, T2, T3, T4, T5, E, V> zip(
     producer4: Producer<T4, E>,
     producer5: Producer<T5, E>,
     transform: (T1, T2, T3, T4, T5) -> V,
-): Result<V, E> {
+): KoResult<V, E> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.AT_MOST_ONCE)
@@ -126,14 +126,14 @@ public inline fun <T1, T2, T3, T4, T5, E, V> zip(
 }
 
 /**
- * Applies the given [transform] function to two [Results][Result], collecting any result that
- * [is an error][Result.isErr] to a [List].
+ * Applies the given [transform] function to two [Results][KoResult], collecting any result that
+ * [is an error][KoResult.isErr] to a [List].
  */
 public inline fun <T1, T2, E, V> zipOrAccumulate(
-    producer1: () -> Result<T1, E>,
-    producer2: () -> Result<T2, E>,
+    producer1: () -> KoResult<T1, E>,
+    producer2: () -> KoResult<T2, E>,
     transform: (T1, T2) -> V,
-): Result<V, List<E>> {
+): KoResult<V, List<E>> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.EXACTLY_ONCE)
@@ -161,15 +161,15 @@ public inline fun <T1, T2, E, V> zipOrAccumulate(
 }
 
 /**
- * Applies the given [transform] function to three [Results][Result], collecting any result that
- * [is an error][Result.isErr] to a [List].
+ * Applies the given [transform] function to three [Results][KoResult], collecting any result that
+ * [is an error][KoResult.isErr] to a [List].
  */
 public inline fun <T1, T2, T3, E, V> zipOrAccumulate(
-    producer1: () -> Result<T1, E>,
-    producer2: () -> Result<T2, E>,
-    producer3: () -> Result<T3, E>,
+    producer1: () -> KoResult<T1, E>,
+    producer2: () -> KoResult<T2, E>,
+    producer3: () -> KoResult<T3, E>,
     transform: (T1, T2, T3) -> V,
-): Result<V, List<E>> {
+): KoResult<V, List<E>> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.EXACTLY_ONCE)
@@ -201,16 +201,16 @@ public inline fun <T1, T2, T3, E, V> zipOrAccumulate(
 }
 
 /**
- * Applies the given [transform] function to four [Results][Result], collecting any result that
- * [is an error][Result.isErr] to a [List].
+ * Applies the given [transform] function to four [Results][KoResult], collecting any result that
+ * [is an error][KoResult.isErr] to a [List].
  */
 public inline fun <T1, T2, T3, T4, E, V> zipOrAccumulate(
-    producer1: () -> Result<T1, E>,
-    producer2: () -> Result<T2, E>,
-    producer3: () -> Result<T3, E>,
-    producer4: () -> Result<T4, E>,
+    producer1: () -> KoResult<T1, E>,
+    producer2: () -> KoResult<T2, E>,
+    producer3: () -> KoResult<T3, E>,
+    producer4: () -> KoResult<T4, E>,
     transform: (T1, T2, T3, T4) -> V,
-): Result<V, List<E>> {
+): KoResult<V, List<E>> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.EXACTLY_ONCE)
@@ -246,17 +246,17 @@ public inline fun <T1, T2, T3, T4, E, V> zipOrAccumulate(
 }
 
 /**
- * Applies the given [transform] function to five [Results][Result], collecting any result that
- * [is an error][Result.isErr] to a [List].
+ * Applies the given [transform] function to five [Results][KoResult], collecting any result that
+ * [is an error][KoResult.isErr] to a [List].
  */
 public inline fun <T1, T2, T3, T4, T5, E, V> zipOrAccumulate(
-    producer1: () -> Result<T1, E>,
-    producer2: () -> Result<T2, E>,
-    producer3: () -> Result<T3, E>,
-    producer4: () -> Result<T4, E>,
-    producer5: () -> Result<T5, E>,
+    producer1: () -> KoResult<T1, E>,
+    producer2: () -> KoResult<T2, E>,
+    producer3: () -> KoResult<T3, E>,
+    producer4: () -> KoResult<T4, E>,
+    producer5: () -> KoResult<T5, E>,
     transform: (T1, T2, T3, T4, T5) -> V,
-): Result<V, List<E>> {
+): KoResult<V, List<E>> {
     contract {
         callsInPlace(producer1, InvocationKind.EXACTLY_ONCE)
         callsInPlace(producer2, InvocationKind.EXACTLY_ONCE)

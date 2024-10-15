@@ -1,8 +1,8 @@
 package com.github.michaelbull.result.coroutines
 
+import com.github.michaelbull.result.KoErr
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.asErr
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.binding
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -16,11 +16,11 @@ import kotlin.contracts.contract
 
 /**
  * Calls the specified function [block] with [CoroutineBindingScope] as its receiver and returns
- * its [Result].
+ * its [KoResult].
  *
  * When inside a binding [block], the [bind][CoroutineBindingScope.bind] function is accessible on
- * any [Result]. Calling the [bind][CoroutineBindingScope.bind] function will attempt to unwrap the
- * [Result] and locally return its [value][Result.value].
+ * any [KoResult]. Calling the [bind][CoroutineBindingScope.bind] function will attempt to unwrap the
+ * [KoResult] and locally return its [value][KoResult.value].
  *
  * Unlike [binding], this function is designed for _concurrent decomposition_ of work. When any
  * [bind][CoroutineBindingScope.bind] returns an error, the [CoroutineScope] will be
@@ -39,7 +39,7 @@ import kotlin.contracts.contract
  *   x.await() + y.await()
  * }
  */
-public suspend inline fun <V, E> coroutineBinding(crossinline block: suspend CoroutineBindingScope<E>.() -> V): Result<V, E> {
+public suspend inline fun <V, E> coroutineBinding(crossinline block: suspend CoroutineBindingScope<E>.() -> V): KoResult<V, E> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -62,7 +62,7 @@ public suspend inline fun <V, E> coroutineBinding(crossinline block: suspend Cor
 internal object BindCancellationException : CancellationException(null as String?)
 
 public interface CoroutineBindingScope<E> : CoroutineScope {
-    public suspend fun <V> Result<V, E>.bind(): V
+    public suspend fun <V> KoResult<V, E>.bind(): V
 }
 
 @PublishedApi
@@ -71,15 +71,15 @@ internal class CoroutineBindingScopeImpl<E>(
 ) : CoroutineBindingScope<E>, CoroutineScope by delegate {
 
     private val mutex = Mutex()
-    var result: Result<Nothing, E>? = null
+    var result: KoErr<E>? = null
 
-    override suspend fun <V> Result<V, E>.bind(): V {
+    override suspend fun <V> KoResult<V, E>.bind(): V {
         return if (isOk) {
             value
         } else {
             mutex.withLock {
                 if (result == null) {
-                    result = this.asErr()
+                    result = this.coerceValueType()
                     coroutineContext.cancel(BindCancellationException)
                 }
 

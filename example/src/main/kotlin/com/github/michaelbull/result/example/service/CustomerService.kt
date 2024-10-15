@@ -2,7 +2,7 @@ package com.github.michaelbull.result.example.service
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.example.model.domain.Created
 import com.github.michaelbull.result.example.model.domain.Customer
@@ -32,13 +32,13 @@ class CustomerService(
     private val repository: CustomerRepository,
 ) {
 
-    fun getById(id: Long): Result<CustomerDto, DomainMessage> {
+    fun getById(id: Long): KoResult<CustomerDto, DomainMessage> {
         return parseCustomerId(id)
             .andThen(::findById)
             .map(::entityToDto)
     }
 
-    fun save(id: Long, dto: CustomerDto): Result<Event?, DomainMessage> {
+    fun save(id: Long, dto: CustomerDto): KoResult<Event?, DomainMessage> {
         return parseCustomerId(id)
             .andThen { upsert(it, dto) }
     }
@@ -57,12 +57,12 @@ class CustomerService(
         )
     }
 
-    private fun findById(id: CustomerId): Result<CustomerEntity, CustomerNotFound> {
+    private fun findById(id: CustomerId): KoResult<CustomerEntity, CustomerNotFound> {
         return repository.findById(id)
             .toResultOr { CustomerNotFound }
     }
 
-    private fun upsert(id: CustomerId, dto: CustomerDto): Result<Event?, DomainMessage> {
+    private fun upsert(id: CustomerId, dto: CustomerDto): KoResult<Event?, DomainMessage> {
         val existingCustomer = repository.findById(id)
 
         return if (existingCustomer != null) {
@@ -72,7 +72,7 @@ class CustomerService(
         }
     }
 
-    private fun update(entity: CustomerEntity, dto: CustomerDto): Result<Event?, DomainMessage> {
+    private fun update(entity: CustomerEntity, dto: CustomerDto): KoResult<Event?, DomainMessage> {
         val validated = validate(dto).getOrElse { return Err(it) }
 
         val updated = entity.copy(
@@ -86,7 +86,7 @@ class CustomerService(
             .mapError(::exceptionToDomainMessage)
     }
 
-    private fun insert(id: CustomerId, dto: CustomerDto): Result<Created, DomainMessage> {
+    private fun insert(id: CustomerId, dto: CustomerDto): KoResult<Created, DomainMessage> {
         val entity = createEntity(id, dto).getOrElse { return Err(it) }
 
         return runCatching { repository.save(entity) }
@@ -94,7 +94,7 @@ class CustomerService(
             .mapError(::exceptionToDomainMessage)
     }
 
-    private fun validate(dto: CustomerDto): Result<Customer, DomainMessage> {
+    private fun validate(dto: CustomerDto): KoResult<Customer, DomainMessage> {
         return zip(
             { PersonalNameParser.parse(dto.firstName, dto.lastName) },
             { EmailAddressParser.parse(dto.email) },
@@ -102,7 +102,7 @@ class CustomerService(
         )
     }
 
-    private fun createEntity(id: CustomerId, dto: CustomerDto): Result<CustomerEntity, DomainMessage> {
+    private fun createEntity(id: CustomerId, dto: CustomerDto): KoResult<CustomerEntity, DomainMessage> {
         return zip(
             { PersonalNameParser.parse(dto.firstName, dto.lastName) },
             { EmailAddressParser.parse(dto.email) },

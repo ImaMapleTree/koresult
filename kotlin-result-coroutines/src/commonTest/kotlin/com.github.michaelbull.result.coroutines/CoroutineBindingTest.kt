@@ -2,7 +2,7 @@ package com.github.michaelbull.result.coroutines
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
@@ -18,17 +18,17 @@ class CoroutineBindingTest {
 
     @Test
     fun returnsOkIfAllBindsSuccessful() = runTest {
-        suspend fun provideX(): Result<Int, BindingError> {
+        suspend fun provideX(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(1)
         }
 
-        suspend fun provideY(): Result<Int, BindingError> {
+        suspend fun provideY(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(2)
         }
 
-        val result: Result<Int, BindingError> = coroutineBinding {
+        val result: KoResult<Int, BindingError> = coroutineBinding {
             val x = provideX().bind()
             val y = provideY().bind()
             x + y
@@ -42,17 +42,17 @@ class CoroutineBindingTest {
 
     @Test
     fun returnsOkIfAllBindsOfDifferentTypeAreSuccessful() = runTest {
-        suspend fun provideX(): Result<String, BindingError> {
+        suspend fun provideX(): KoResult<String, BindingError> {
             delay(1)
             return Ok("1")
         }
 
-        suspend fun provideY(x: Int): Result<Int, BindingError> {
+        suspend fun provideY(x: Int): KoResult<Int, BindingError> {
             delay(1)
             return Ok(x + 2)
         }
 
-        val result: Result<Int, BindingError> = coroutineBinding {
+        val result: KoResult<Int, BindingError> = coroutineBinding {
             val x = provideX().bind()
             val y = provideY(x.toInt()).bind()
             y
@@ -66,22 +66,22 @@ class CoroutineBindingTest {
 
     @Test
     fun returnsFirstErrIfBindingFailed() = runTest {
-        suspend fun provideX(): Result<Int, BindingError> {
+        suspend fun provideX(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(1)
         }
 
-        suspend fun provideY(): Result<Int, BindingError> {
+        suspend fun provideY(): KoResult<Int, BindingError> {
             delay(1)
             return Err(BindingError)
         }
 
-        suspend fun provideZ(): Result<Int, BindingError> {
+        suspend fun provideZ(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(2)
         }
 
-        val result: Result<Int, BindingError> = coroutineBinding {
+        val result: KoResult<Int, BindingError> = coroutineBinding {
             val x = provideX().bind()
             val y = provideY().bind()
             val z = provideZ().bind()
@@ -100,25 +100,25 @@ class CoroutineBindingTest {
         var yStateChange = false
         var zStateChange = false
 
-        suspend fun provideX(): Result<Int, BindingError> {
+        suspend fun provideX(): KoResult<Int, BindingError> {
             delay(1)
             xStateChange = true
             return Ok(1)
         }
 
-        suspend fun provideY(): Result<Int, BindingError> {
+        suspend fun provideY(): KoResult<Int, BindingError> {
             delay(10)
             yStateChange = true
             return Err(BindingError)
         }
 
-        suspend fun provideZ(): Result<Int, BindingError> {
+        suspend fun provideZ(): KoResult<Int, BindingError> {
             delay(1)
             zStateChange = true
             return Err(BindingError)
         }
 
-        val result: Result<Int, BindingError> = coroutineBinding {
+        val result: KoResult<Int, BindingError> = coroutineBinding {
             val x = provideX().bind()
             val y = provideY().bind()
             val z = provideZ().bind()
@@ -137,22 +137,22 @@ class CoroutineBindingTest {
 
     @Test
     fun returnsFirstErrIfBindingsOfDifferentTypesFailed() = runTest {
-        suspend fun provideX(): Result<Int, BindingError> {
+        suspend fun provideX(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(1)
         }
 
-        suspend fun provideY(): Result<String, BindingError> {
+        suspend fun provideY(): KoResult<String, BindingError> {
             delay(1)
             return Err(BindingError)
         }
 
-        suspend fun provideZ(): Result<Int, BindingError> {
+        suspend fun provideZ(): KoResult<Int, BindingError> {
             delay(1)
             return Ok(2)
         }
 
-        val result: Result<Int, BindingError> = coroutineBinding {
+        val result: KoResult<Int, BindingError> = coroutineBinding {
             val x = provideX().bind()
             val y = provideY().bind()
             val z = provideZ().bind()

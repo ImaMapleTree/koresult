@@ -8,7 +8,7 @@ import kotlin.contracts.contract
  * successful, catching any [Throwable] exception that was thrown from the [block] function
  * execution and encapsulating it as a failure.
  */
-public inline fun <V> runCatching(block: () -> V): Result<V, Throwable> {
+public inline fun <V> runCatching(block: () -> V): KoResult<V, Throwable> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -25,7 +25,7 @@ public inline fun <V> runCatching(block: () -> V): Result<V, Throwable> {
  * encapsulated result if invocation was successful, catching any [Throwable] exception that was
  * thrown from the [block] function execution and encapsulating it as a failure.
  */
-public inline infix fun <T, V> T.runCatching(block: T.() -> V): Result<V, Throwable> {
+public inline infix fun <T, V> T.runCatching(block: T.() -> V): KoResult<V, Throwable> {
     contract {
         callsInPlace(block, InvocationKind.EXACTLY_ONCE)
     }
@@ -38,10 +38,10 @@ public inline infix fun <T, V> T.runCatching(block: T.() -> V): Result<V, Throwa
 }
 
 /**
- * Converts a nullable of type [V] to a [Result]. Returns [Ok] if the value is
+ * Converts a nullable of type [V] to a [KoResult]. Returns [Ok] if the value is
  * non-null, otherwise the supplied [error].
  */
-public inline infix fun <V, E> V?.toResultOr(error: () -> E): Result<V, E> {
+public inline infix fun <V, E> V?.toResultOr(error: () -> E): KoResult<V, E> {
     contract {
         callsInPlace(error, InvocationKind.AT_MOST_ONCE)
     }

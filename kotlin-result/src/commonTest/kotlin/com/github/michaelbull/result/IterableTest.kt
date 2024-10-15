@@ -26,7 +26,7 @@ class IterableTest {
 
         @Test
         fun returnsFirstErrorIfErr() {
-            val result: Result<Int, IterableError> = listOf(5, 10, 15, 20, 25).fold(
+            val result: KoResult<Int, IterableError> = listOf(5, 10, 15, 20, 25).fold(
                 initial = 1,
                 operation = { a, b ->
                     when (b) {

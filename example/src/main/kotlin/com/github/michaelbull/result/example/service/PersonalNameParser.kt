@@ -2,7 +2,7 @@ package com.github.michaelbull.result.example.service
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.KoResult
 import com.github.michaelbull.result.example.model.domain.DomainMessage
 import com.github.michaelbull.result.example.model.domain.FirstNameRequired
 import com.github.michaelbull.result.example.model.domain.FirstNameTooLong
@@ -14,7 +14,7 @@ object PersonalNameParser {
 
     private const val MAX_LENGTH = 10
 
-    fun parse(first: String?, last: String?): Result<PersonalName, DomainMessage> {
+    fun parse(first: String?, last: String?): KoResult<PersonalName, DomainMessage> {
         return when {
             first.isNullOrBlank() -> Err(FirstNameRequired)
             last.isNullOrBlank() -> Err(LastNameRequired)
