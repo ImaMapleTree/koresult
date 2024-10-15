@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass.set("com.github.michaelbull.result.example.ApplicationKt")
+    mainClass.set("com.sylvona.koresult.example.ApplicationKt")
 }
 
 kotlin {
