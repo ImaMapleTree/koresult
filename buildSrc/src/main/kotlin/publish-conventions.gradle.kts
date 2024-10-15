@@ -39,8 +39,8 @@ publishing {
         pom {
             name.set(project.name)
             description.set(project.description)
-            url.set("https://github.com/michaelbull/kotlin-result")
-            inceptionYear.set("2017")
+            url.set("https://github.com/ImaMapleTree/koresult.git")
+            inceptionYear.set("2024")
 
             licenses {
                 license {
@@ -51,12 +51,16 @@ publishing {
 
             developers {
                 developer {
-                    name.set("Michael Bull")
-                    url.set("https://www.michael-bull.com")
+                    name.set("Evan Cowin")
+                    url.set("https://github.com/ImaMapleTree")
                 }
             }
 
             contributors {
+                contributor {
+                    name.set("Michael Bull")
+                    url.set("https://www.michael-bull.com")
+                }
                 contributor {
                     name.set("Kevin Herron")
                     url.set("https://github.com/kevinherron")
@@ -169,19 +173,19 @@ publishing {
             }
 
             scm {
-                connection.set("scm:git:https://github.com/michaelbull/kotlin-result")
-                developerConnection.set("scm:git:git@github.com:michaelbull/kotlin-result.git")
-                url.set("https://github.com/michaelbull/kotlin-result")
+                connection.set("scm:git:https://github.com/imamapletree/koresultt")
+                developerConnection.set("scm:git:git@github.com:imamapletree/koresult.git")
+                url.set("https://github.com/imamapletree/koresult")
             }
 
             issueManagement {
                 system.set("GitHub Issues")
-                url.set("https://github.com/michaelbull/kotlin-result/issues")
+                url.set("https://github.com/imamapletree/koresult/issues")
             }
 
             ciManagement {
                 system.set("GitHub Actions")
-                url.set("https://github.com/michaelbull/kotlin-result/actions")
+                url.set("https://github.com/imamapletree/koresult/actions")
             }
         }
     }

@@ -2,9 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [ "master" ]
-  push:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -58,7 +56,7 @@ jobs:
   publish:
     name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    if: github.ref == 'refs/heads/master' && github.repository == 'michaelbull/kotlin-result'
+    if: github.ref == 'refs/heads/master' && github.repository == 'imamapletree/koresult'
     needs: build
 
     strategy:
@@ -66,35 +64,8 @@ jobs:
         include:
           - os: ubuntu-latest
             tasks: >
-              publishAndroidNativeArm32PublicationToMavenRepository
-              publishAndroidNativeArm64PublicationToMavenRepository
-              publishAndroidNativeX64PublicationToMavenRepository
-              publishAndroidNativeX86PublicationToMavenRepository
-              publishJsPublicationToMavenRepository
-              publishJvmPublicationToMavenRepository
               publishKotlinMultiplatformPublicationToMavenRepository
-              publishLinuxArm64PublicationToMavenRepository
-              publishLinuxX64PublicationToMavenRepository
-              publishWasmJsPublicationToMavenRepository
 
-          - os: windows-latest
-            tasks: publishMingwX64PublicationToMavenRepository
-
-          - os: macos-latest
-            tasks: >
-              publishIosArm64PublicationToMavenRepository
-              publishIosSimulatorArm64PublicationToMavenRepository
-              publishIosX64PublicationToMavenRepository
-              publishMacosArm64PublicationToMavenRepository
-              publishMacosX64PublicationToMavenRepository
-              publishTvosArm64PublicationToMavenRepository
-              publishTvosSimulatorArm64PublicationToMavenRepository
-              publishTvosX64PublicationToMavenRepository
-              publishWatchosArm32PublicationToMavenRepository
-              publishWatchosArm64PublicationToMavenRepository
-              publishWatchosDeviceArm64PublicationToMavenRepository
-              publishWatchosSimulatorArm64PublicationToMavenRepository
-              publishWatchosX64PublicationToMavenRepository
 
     steps:
       - name: Checkout Project
