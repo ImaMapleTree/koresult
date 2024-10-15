@@ -28,16 +28,34 @@ public fun <E> Err(error: E): KoErr<E> {
  */
 public class KoResult<out V, out E> internal constructor(
     private val inlineValue: Any?,
+    /**
+     * Returns `true` if this [result][KoResult] is a [success][KoOk], otherwise, returns `false`
+     */
     public val isOk: Boolean
 ) {
+    /**
+     * The value of this [result][KoResult]. This will throw an exception if the
+     * result does not contain a value that is of type [V], which is likely the case if the result [is an error][isErr].
+     *
+     * @throws ClassCastException thrown if the inner value was not of type [V]
+     */
     @Suppress("UNCHECKED_CAST")
     public val value: V
         get() = inlineValue as V
 
+    /**
+     * The error value of this [result][KoResult]. This will throw an exception if the
+     * result does not contain a value that is of type [E], which is likely the case if the result [is ok][isOk].
+     *
+     * @throws ClassCastException thrown if the inner value was not of type [E]
+     */
     @Suppress("UNCHECKED_CAST")
     public val error: E
         get() = inlineValue as E
 
+    /**
+     * Returns `true` if this [result][KoResult] is an [error][KoErr], otherwise, returns `false`
+     */
     public val isErr: Boolean = !isOk
 
     public companion object {
@@ -68,11 +86,35 @@ public class KoResult<out V, out E> internal constructor(
         }
     }
 
+    /**
+     * Coerces the current [KoResult<V, E>][KoResult] into a [KoResult<C, E>][KoResult] by applying an unchecked cast
+     * on the result. This can be used to get the base [KoErr] by discarding the [value type][V] when certain
+     * that a result is a failure.
+     * Example:
+     * ```
+     * val error: KoResult<Int, ExampleErr> = Err(ExampleErr())
+     * val genericError = error.coerceValueType<Nothing>()
+     * ```
+     * @param C the new value type for the coerced result
+     * @return this [result][KoResult] with its [value type][V] coerced to [C]
+     */
     @Suppress("UNCHECKED_CAST")
     public inline fun <C> coerceValueType() : KoResult<C, E> {
         return this as KoResult<C, E>
     }
 
+    /**
+     * Coerces the current [KoResult<V, E>][KoResult] into a [KoResult<V, C>][KoResult] by applying an unchecked cast
+     * on the result. This can be used to get the base [KoOk] by discarding the [error type][E] when certain
+     * that a result is a success.
+     * Example:
+     * ```
+     * val success: KoResult<Int, ExampleErr> = Ok(50)
+     * val genericSuccess = success.coerceErrorType<Nothing>()
+     * ```
+     * @param C the new error type for the coerced result
+     * @return this [result][KoResult] with its [error type][E] coerced to [C]
+     */
     @Suppress("UNCHECKED_CAST")
     public inline fun <C> coerceErrorType(): KoResult<V, C> {
         return this as KoResult<V, C>
