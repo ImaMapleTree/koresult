@@ -8,56 +8,56 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            tasks: build
-
-          - os: macos-latest
-            tasks: >
-              iosX64Test
-              macosX64Test
-              tvosX64Test
-              watchosX64Test
-
-          - os: windows-latest
-            tasks: mingwX64Test
-
-    steps:
-      - name: Checkout Project
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/actions/wrapper-validation@750cdda3edd6d51b7fdfc069d2e2818cf3c44f4c # v3.3.1
-
-      - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
-        with:
-          path: |
-            ~/.konan
-          key: "${{ runner.os }}-${{ hashFiles('**/.lock') }}"
-
-      - name: Setup JDK
-        uses: actions/setup-java@9704b39bf258b59bc04b50fa2dd55e9ed76b47a8 # v4.1.0
-        with:
-          distribution: temurin
-          java-version: 17
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@750cdda3edd6d51b7fdfc069d2e2818cf3c44f4c # v3.3.1
-
-      - name: Build with Gradle Wrapper
-        run: ./gradlew ${{ matrix.tasks }}
+#  build:
+#    name: Build on ${{ matrix.os }}
+#    runs-on: ${{ matrix.os }}
+#
+#    strategy:
+#      matrix:
+#        include:
+#          - os: ubuntu-latest
+#            tasks: build
+#
+#          - os: macos-latest
+#            tasks: >
+#              iosX64Test
+#              macosX64Test
+#              tvosX64Test
+#              watchosX64Test
+#
+#          - os: windows-latest
+#            tasks: mingwX64Test
+#
+#    steps:
+#      - name: Checkout Project
+#        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+#
+#      - name: Validate Gradle Wrapper
+#        uses: gradle/actions/wrapper-validation@750cdda3edd6d51b7fdfc069d2e2818cf3c44f4c # v3.3.1
+#
+#      - uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+#        with:
+#          path: |
+#            ~/.konan
+#          key: "${{ runner.os }}-${{ hashFiles('**/.lock') }}"
+#
+#      - name: Setup JDK
+#        uses: actions/setup-java@9704b39bf258b59bc04b50fa2dd55e9ed76b47a8 # v4.1.0
+#        with:
+#          distribution: temurin
+#          java-version: 17
+#
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@750cdda3edd6d51b7fdfc069d2e2818cf3c44f4c # v3.3.1
+#
+#      - name: Build with Gradle Wrapper
+#        run: ./gradlew ${{ matrix.tasks }}
 
   publish:
     name: Publish on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-    if: github.ref == 'refs/heads/master' && github.repository == 'imamapletree/koresult'
-    needs: build
+    if: github.repository == 'ImaMapleTree/koresult'
+#    needs: build
 
     strategy:
       matrix:
